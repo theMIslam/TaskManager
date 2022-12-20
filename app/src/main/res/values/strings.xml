@@ -9,4 +9,9 @@
     <string name="description">Description</string>
     <string name="name">name</string>
     <string name="age">age</string>
+    <string name="profile">Profile</string>
+    <string name="skip">skip</string>
+    <string name="title">title</string>
+    <string name="something">something</string>
+    <string name="next">next</string>
 </resources>

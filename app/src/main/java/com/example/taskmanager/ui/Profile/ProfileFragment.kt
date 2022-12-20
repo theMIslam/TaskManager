@@ -1,60 +1,99 @@
-package com.example.taskmanager.ui.Profile
-
+import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
+import com.example.taskmanager.data.Pref
 import com.example.taskmanager.databinding.FragmentProfileBinding
+import com.example.taskmanager.utils.loadImage
 
+@Suppress("DEPRECATION")
 class ProfileFragment : Fragment() {
-    private lateinit var binding: FragmentProfileBinding
 
+    private lateinit var pref: Pref
 
-    var launchForResult = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            val image = result.data?.data
-            Glide.with(binding.profileImage).load(image).into(binding.profileImage)
-
+    private val launcher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK
+            && result.data != null
+        ) {
+            val photoUri: Uri? = result.data?.data
+            binding.ivProfile.loadImage(photoUri.toString())
+            pref.saveImage(photoUri.toString())
         }
     }
 
+    private val IMAGE_GALLERY_REQUEST_CODE: Int = 555
+    private lateinit var _binding: FragmentProfileBinding
+
+    private val binding get() = _binding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //Inflate the layout for this fragment
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
+
+        pref = Pref(requireContext())
+
+
+        binding.ivProfile.loadImage(pref.getImage())
+        binding.etUserName.setText(pref.getName())
+        binding.etUserName.addTextChangedListener {
+            pref.saveName(binding.etUserName.text.toString())
+        }
+
+        binding.ivProfile.setOnClickListener {
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            launcher.launch(intent)
+        }
+
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        initListeners()
-
-
+        clickListener()
     }
 
-    private fun initListeners() {
-        binding.profileImage.setOnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.type = "image/*"
-            launchForResult.launch(intent)
+    private fun clickListener() {
+        _binding.ivProfile.setOnClickListener {
+            openFile()
         }
+        _binding.tvUserName.setOnClickListener {
+            _binding.etContainer.visibility = View.VISIBLE
+        }
+    }
 
+    private fun openFile() {
+        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        startActivityForResult(gallery, IMAGE_GALLERY_REQUEST_CODE)
+    }
+
+    @Deprecated("Deprecated in Java")
+    @RequiresApi(Build.VERSION_CODES.P)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IMAGE_GALLERY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK && requestCode == IMAGE_GALLERY_REQUEST_CODE) {
+                val imageUri = data?.data
+                _binding.ivProfile.setImageURI(imageUri)
+            }
+        }
     }
 
 }

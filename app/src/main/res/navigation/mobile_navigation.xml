@@ -26,4 +26,14 @@
         android:id="@+id/taskFragment"
         android:name="com.example.taskmanager.ui.task.TaskFragment"
         android:label="Label" />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.taskmanager.ui.Profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/onBoardingFragment"
+        android:name="com.example.taskmanager.ui.onBoarding.OnBoardingFragment"
+        android:label="fragment_on_boarding"
+        tools:layout="@layout/fragment_on_boarding" />
 </navigation>
