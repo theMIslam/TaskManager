@@ -62,6 +62,19 @@ class ProfileFragment : Fragment() {
             launcher.launch(intent)
         }
 
+        binding.etUserAge.setText(pref.getAge())
+        binding.etUserAge.addTextChangedListener {
+            pref.setAge(binding.etUserAge.text.toString())
+        }
+        binding.etUserGen.setText(pref.getGen())
+        binding.etUserGen.addTextChangedListener {
+            pref.setGen(binding.etUserGen.text.toString())
+        }
+        binding.etUserName.setText(pref.getName())
+        binding.etUserName.addTextChangedListener {
+            pref.setName(binding.etUserName.text.toString())
+        }
+
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         return binding.root
@@ -76,7 +89,7 @@ class ProfileFragment : Fragment() {
         _binding.ivProfile.setOnClickListener {
             openFile()
         }
-        _binding.tvUserName.setOnClickListener {
+        _binding.etUserName.setOnClickListener {
             _binding.etContainer.visibility = View.VISIBLE
         }
     }
@@ -85,6 +98,7 @@ class ProfileFragment : Fragment() {
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         startActivityForResult(gallery, IMAGE_GALLERY_REQUEST_CODE)
     }
+
 
     @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.P)
