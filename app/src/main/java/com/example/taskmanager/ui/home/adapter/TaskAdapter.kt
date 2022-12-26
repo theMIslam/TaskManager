@@ -28,7 +28,7 @@ class TaskAdapter(private val data: ArrayList<Task>) :
 
     inner class TaskViewHolder(private val binding: ItemTaskBinding) : ViewHolder(binding.root) {
         fun bind(task: Task) {
-            binding.tvTitle.text = task.title
+            binding.tvTittle.text = task.tittle
             binding.tvDesc.text = task.desc
         }
     }
