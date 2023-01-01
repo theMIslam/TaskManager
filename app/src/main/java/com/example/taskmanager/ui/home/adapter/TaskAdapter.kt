@@ -6,8 +6,9 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.taskmanager.databinding.ItemTaskBinding
 import com.example.taskmanager.ui.model.Task
+import kotlin.reflect.KFunction1
 
-class TaskAdapter(private val data: ArrayList<Task>) :
+class TaskAdapter(private val data: KFunction1<Task, Unit>, kFunction1: (Task) -> Unit) :
     Adapter<TaskAdapter.TaskViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -25,6 +26,9 @@ class TaskAdapter(private val data: ArrayList<Task>) :
     }
 
     override fun getItemCount() = data.size
+    fun addTasks(data: List<Task>) {
+
+    }
 
     inner class TaskViewHolder(private val binding: ItemTaskBinding) : ViewHolder(binding.root) {
         fun bind(task: Task) {

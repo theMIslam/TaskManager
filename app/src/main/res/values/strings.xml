@@ -15,4 +15,7 @@
     <string name="something">something</string>
     <string name="next">next</string>
     <string name="gender" />
+    <string name="goggle">Goggle</string>
+    <string name="google">Google</string>
+    <string name="default_web_client_id" />
 </resources>

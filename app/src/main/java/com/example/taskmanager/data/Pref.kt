@@ -50,6 +50,14 @@ class Pref(val context: Context) {
         return pref.getString(NAME_KEY, "").toString()
     }
 
+    fun saveImage(toString: Any) {
+        TODO("Not yet implemented")
+    }
+
+    fun saveName(toString: String) {
+        TODO("Not yet implemented")
+    }
+
     companion object {
         private const val ON_BOARDING_SEEN = "is_seen"
         private const val PREF_NAME = "pref_task_manager"

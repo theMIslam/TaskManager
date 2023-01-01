@@ -5,17 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <!--    <de.hdodenhof.circleimageview.CircleImageView-->
+    <!--        android:id="@+id/iv_boarding"-->
+    <!--        android:layout_width="240dp"-->
+    <!--        android:layout_height="240dp"-->
+    <!--        android:layout_marginBottom="128dp"-->
+    <!--        android:scaleType="centerCrop"-->
+    <!--        android:src="@drawable/profile"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/iv_boarding"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_marginBottom="128dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_profile"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
     <TextView
         android:id="@+id/tv_title"
@@ -28,7 +41,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_boarding" />
-
 
     <TextView
         android:id="@+id/tv_skip"

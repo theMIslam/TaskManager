@@ -1,5 +1,6 @@
 package com.example.taskmanager.ui.Profile
 
+import Pref
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -15,8 +16,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.example.taskmanager.data.Pref
 import com.example.taskmanager.databinding.FragmentProfileBinding
+
 import com.example.taskmanager.utils.loadImage
 
 @Suppress("DEPRECATION")

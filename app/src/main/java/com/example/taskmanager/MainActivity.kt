@@ -1,5 +1,6 @@
 package com.example.taskmanager
 
+import Pref
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -10,12 +11,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.taskmanager.data.Pref
 import com.example.taskmanager.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity(): AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +26,7 @@ class MainActivity(): AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val pref = Pref(this)
+        val auth = FirebaseAuth.getInstance()
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -32,6 +35,10 @@ class MainActivity(): AppCompatActivity() {
 
         if (pref.isOnBoardingSeen())
             navController.navigate(R.id.onBoardingFragment)
+
+        if (auth.currentUser==null) {
+            navController.navigate(R.id.authFragment)
+        }
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -43,6 +50,10 @@ class MainActivity(): AppCompatActivity() {
         )
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             navView.isVisible = destination.id != R.id.taskFragment
+            if (destination.id == R.id.onBoardingFragment  || destination.id == R.id.authFragment  ) {
+                supportActionBar?.hide()
+            }else supportActionBar?.show()
+
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
