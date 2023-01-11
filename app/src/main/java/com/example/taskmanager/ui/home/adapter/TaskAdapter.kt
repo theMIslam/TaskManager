@@ -8,6 +8,11 @@ import com.example.taskmanager.databinding.ItemTaskBinding
 import com.example.taskmanager.ui.model.Task
 import kotlin.reflect.KFunction1
 
+private val <P1, R> KFunction1<P1, R>.size: Int
+    get() {
+        TODO("Not yet implemented")
+    }
+
 class TaskAdapter(private val data: KFunction1<Task, Unit>, kFunction1: (Task) -> Unit) :
     Adapter<TaskAdapter.TaskViewHolder>() {
 
@@ -37,4 +42,8 @@ class TaskAdapter(private val data: KFunction1<Task, Unit>, kFunction1: (Task) -
         }
     }
 
+}
+
+private operator fun <P1, R> KFunction1<P1, R>.get(position: Int): P1 {
+    TODO("Not yet implemented")
 }

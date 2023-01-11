@@ -14,9 +14,18 @@ class OnBoardingAdapter(private val context: Context, private val onClick: () ->
     RecyclerView.Adapter<OnBoardingAdapter.OnBoardingViewHolder>() {
 
     private var data = arrayListOf(
-        OnBoard(R.raw.task_anim_1,"Tittle 1"),
-        OnBoard(R.raw.task_anim_1,"Tittle 2"),
-        OnBoard(R.raw.task_anim_1,"Tittle 3"),
+        OnBoard(
+            R.raw.tasks,
+            "Productivity"
+        ),
+        OnBoard(
+            R.raw.payment,
+            "Made by those who use"
+        ),
+        OnBoard(
+            R.raw.devices,
+            "Sync with other devices"
+        )
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnBoardingViewHolder {
@@ -39,8 +48,9 @@ class OnBoardingAdapter(private val context: Context, private val onClick: () ->
     inner class OnBoardingViewHolder(private val binding: ItemBoardingBinding) :
         ViewHolder(binding.root) {
         fun bind(onBoard: OnBoard) {
-            onBoard.anim?.let { binding.ivBoarding.setAnimation(it ) }
+            binding.ivBoarding.setAnimation(onBoard.image!!)
             binding.tvTitle.text = onBoard.title
+
             if (adapterPosition == data.lastIndex) binding.tvSkip.text =
                 context.getString(R.string.next) else context.getString(R.string.skip)
             binding.tvSkip.setOnClickListener {

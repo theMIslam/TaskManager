@@ -25,55 +25,56 @@ import com.google.firebase.auth.*
 
 class AuthFragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth
-    private val REQ_ONE_TAP = 2 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var binding:FragmentAuthBinding
-    private lateinit var oneTapClient: SignInClient
+    private lateinit var binding: FragmentAuthBinding
     private lateinit var signInRequest: BeginSignInRequest
+    private val REQ_ONE_TAP = 2
+    private lateinit var oneTapClient: SignInClient
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding=FragmentAuthBinding.inflate(inflater, container, false )
+        savedInstanceState: Bundle?,
+    ): View {
+        binding = FragmentAuthBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        auth=FirebaseAuth.getInstance()
+        mAuth = FirebaseAuth.getInstance()
         oneTapClient = Identity.getSignInClient(requireActivity())
         signInRequest = BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
                     .setServerClientId(getString(R.string.default_web_client_id))
-                    .setFilterByAuthorizedAccounts(false)
+//                    .setFilterByAuthorizedAccounts(false)
                     .build()
             )
-            .build();
+            .build()
         binding.btnGoggle.setOnClickListener {
-            signInGoggle()
+            signInWithGoogle()
         }
+
     }
 
-    private fun signInGoggle() {
-        oneTapClient.beginSignIn(signInRequest).addOnSuccessListener{
-            {
-               startIntentSenderForResult(
-                   it.pendingIntent.intentSender, REQ_ONE_TAP,
-                   null, 0, 0, 0, null);
-           }
+    private fun signInWithGoogle() {
+        oneTapClient.beginSignIn(signInRequest).addOnSuccessListener {
+            @Suppress("DEPRECATION")
+            startIntentSenderForResult(
+                it.pendingIntent.intentSender, REQ_ONE_TAP,
+                null, 0, 0, 0, null
+            )
         }.addOnFailureListener {
-            Log.e("ololo", "signInGoggle: " +  it.message )
+            Log.e("ololo", "singInGoogle: " + it.message)
         }
     }
 
-     override fun onActivityResult(
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(
         requestCode: Int,
-        resultCode: Int,
-        data: Intent?
+        resultCode: Int, data: Intent?,
     ) {
+        @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQ_ONE_TAP -> try {
@@ -81,31 +82,19 @@ class AuthFragment : Fragment() {
                 val idToken = credential.googleIdToken
                 if (idToken != null) {
                     val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
-                    mAuth.signInWithCredintial(firebaseCredential)
-                        .addOnCompleteListener(requireActivity(),OnCompleteListener<AuthResult?> {
-                            task ->
+                    mAuth.signInWithCredential(firebaseCredential)
+                        .addOnCompleteListener(
+                            requireActivity()
+                        ) { task ->
                             if (task.isSuccessful) {
                                 findNavController().navigateUp()
-                            }else{
-                                Log.e("ololo", "OnActivityResult : " + (task.exception?.message))
+                            } else {
+                                Log.e("aaa", "onActivityResult: " + task.exception?.message)
                             }
-                        })
+                        }
                 }
-            } catch (e: ApiException) {
-                // ...
+            } catch (_: ApiException) {
             }
         }
     }
-
-}
-
-private fun Any.addOnCompleteListener(
-    requireActivity: FragmentActivity,
-    onCompleteListener: OnCompleteListener<AuthResult?>
-) {
-
-}
-
-private fun FirebaseAuth.signInWithCredintial(firebaseCredential: AuthCredential): Any {
-    TODO("Not yet implemented")
 }
